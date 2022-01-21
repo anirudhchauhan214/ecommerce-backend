@@ -20,6 +20,7 @@ db.Address = require("../model/UserAddressModel")(sequelize, DataTypes);
 db.Products = require("../model/ProductsModel")(sequelize, DataTypes);
 db.Cart = require("../model/CartModel")(sequelize, DataTypes);
 db.Orders = require("../model/OrdersModel")(sequelize, DataTypes);
+db.OrderItems = require("../model/OrderItem")(sequelize, DataTypes);
 
 db.Users.hasMany(db.Address);
 db.Users.hasMany(db.Products);
@@ -30,7 +31,10 @@ db.Address.belongsTo(db.Users);
 db.Products.belongsTo(db.Users);
 db.Cart.belongsTo(db.Users);
 db.Orders.belongsTo(db.Users);
-
-db.sequelize.sync({ force: true });
+try {
+  db.sequelize.sync({ force: true });
+} catch (err) {
+  throw err;
+}
 
 module.exports = db;
