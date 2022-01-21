@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       pincode: DataTypes.INTEGER,
       city: { type: DataTypes.STRING, allowNull: false },
       state: { type: DataTypes.STRING, allowNull: false },
-      country: { type: DataTypes.INTEGER, allowNull: false },
+      country: { type: DataTypes.STRING, allowNull: false },
     },
     { timestamps: true }
   );

@@ -21,18 +21,33 @@ db.Products = require("../model/ProductsModel")(sequelize, DataTypes);
 db.Cart = require("../model/CartModel")(sequelize, DataTypes);
 db.Orders = require("../model/OrdersModel")(sequelize, DataTypes);
 db.OrderItems = require("../model/OrderItem")(sequelize, DataTypes);
+db.CartItems = require("../model/CartItem")(sequelize, DataTypes);
+db.Category = require("../model/CategoryModel")(sequelize, DataTypes);
 
 db.Users.hasMany(db.Address);
 db.Users.hasMany(db.Products);
 db.Users.hasOne(db.Cart);
 db.Users.hasMany(db.Orders);
+db.Category.hasMany(db.Products);
 
 db.Address.belongsTo(db.Users);
 db.Products.belongsTo(db.Users);
 db.Cart.belongsTo(db.Users);
 db.Orders.belongsTo(db.Users);
+db.Products.belongsTo(db.Category);
+db.Cart.belongsToMany(db.Products, {
+  through: db.CartItems,
+});
+db.Products.belongsToMany(db.Cart, {
+  through: db.CartItems,
+});
+db.Orders.belongsToMany(db.Products, { through: db.OrderItems });
+db.Products.belongsToMany(db.Orders, {
+  through: db.OrderItems,
+});
+
 try {
-  db.sequelize.sync({ force: true });
+  db.sequelize.sync();
 } catch (err) {
   throw err;
 }
