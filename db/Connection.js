@@ -24,16 +24,16 @@ db.OrderItems = require("../model/OrderItem")(sequelize, DataTypes);
 db.CartItems = require("../model/CartItem")(sequelize, DataTypes);
 db.Category = require("../model/CategoryModel")(sequelize, DataTypes);
 
-db.Users.hasMany(db.Address);
-db.Users.hasMany(db.Products);
-db.Users.hasOne(db.Cart);
-db.Users.hasMany(db.Orders);
-db.Category.hasMany(db.Products);
+db.Users.hasMany(db.Address, { foreignKey: "userId" });
+db.Users.hasMany(db.Products, { foreignKey: "userId" });
+db.Users.hasOne(db.Cart, { foreignKey: "userId" });
+db.Users.hasMany(db.Orders, { foreignKey: "userId" });
+db.Category.hasMany(db.Products, { foreignKey: "userId" });
 
-db.Address.belongsTo(db.Users);
-db.Products.belongsTo(db.Users);
-db.Cart.belongsTo(db.Users);
-db.Orders.belongsTo(db.Users);
+db.Address.belongsTo(db.Users, { foreignKey: "userId" });
+db.Products.belongsTo(db.Users, { foreignKey: "userId" });
+db.Cart.belongsTo(db.Users, { foreignKey: "userId" });
+db.Orders.belongsTo(db.Users, { foreignKey: "userId" });
 db.Products.belongsTo(db.Category);
 db.Cart.belongsToMany(db.Products, {
   through: db.CartItems,
