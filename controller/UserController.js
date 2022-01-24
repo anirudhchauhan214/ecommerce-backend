@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const connection = require("../db/Connection");
 const User = connection.Users;
+const Cart = connection.Cart;
 
 const registerUser = async (req, res) => {
   let data = req.body;
@@ -73,7 +74,6 @@ const getUser = async (req, res) => {
     const users = await User.findAll({
       include: [
         { model: connection.Products },
-        { model: connection.Orders },
         { model: connection.Address },
         { model: connection.Cart },
       ],
@@ -131,7 +131,6 @@ const getSingleUser = async (req, res) => {
       where: { userId: id },
       include: [
         { model: connection.Products },
-        { model: connection.Orders },
         { model: connection.Address },
         { model: connection.Cart },
       ],

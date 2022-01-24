@@ -29,6 +29,7 @@ const getSingleCategory = async (req, res) => {
 
 const addCategory = async (req, res) => {
   const data = req.body;
+  const userId = req.params.userId;
 
   if (data.title == "" || data.title == null) {
     return res.status(404).json({ status: false, message: "Please enter a title" });
@@ -42,7 +43,7 @@ const addCategory = async (req, res) => {
         message: "Category name already exists!! Try with different title",
       });
     } else {
-      const category = await Category.create(data);
+      const category = await Category.create({ ...data, userId });
       return res.status(200).json({ status: true, message: "Category added successfully!!" });
     }
   } catch (err) {

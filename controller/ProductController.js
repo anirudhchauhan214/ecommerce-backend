@@ -22,7 +22,7 @@ const addProducts = async (req, res) => {
 
   try {
     const query = await Products.findAll({
-      where: { title: data.title, price: data.price, userUserId: userId },
+      where: { title: data.title, price: data.price, userId: req.params.userId },
     });
     if (query.length > 0) {
       return res
@@ -30,11 +30,11 @@ const addProducts = async (req, res) => {
         .json({ status: false, message: "Product with same name already exists!!" });
     }
 
-    const productData = await Products.create({ ...data, userUserId: userId });
+    const productData = await Products.create({ ...data, userId });
     const response = {
       status: true,
       message: "Product added successfully!!",
-      data: { userId: userId, ...productData.dataValues },
+      data: { userId, ...productData.dataValues },
     };
     return res.status(200).json(response);
   } catch (err) {
