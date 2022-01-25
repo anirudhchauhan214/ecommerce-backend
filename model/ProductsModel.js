@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       title: { type: DataTypes.STRING, allowNull: false },
       description: { type: DataTypes.STRING, allowNull: false },
       price: { type: DataTypes.INTEGER, allowNull: false },
-      images: { type: DataTypes.BLOB("long") },
+      images: { type: DataTypes.JSON },
       categoryId: { type: DataTypes.INTEGER, allowNull: false },
     },
     { timestamps: true }

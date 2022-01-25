@@ -6,31 +6,15 @@ const Category = connection.Category;
 const addProducts = async (req, res) => {
   let data = req.body;
   const userId = req.params.userId;
-
-  if (
-    data.title == "" ||
-    data.title == null ||
-    data.description == null ||
-    data.price == null ||
-    data.description == "" ||
-    data.price == "" ||
-    data.categoryId == null ||
-    data.categoryId == ""
-  ) {
-    return res.status(404).send({ status: false, message: "Please fill the form correctly!!" });
-  }
+  const paths = await req.files.map((file) => ({ fileName: file.filename, filePath: file.path }));
 
   try {
-    const query = await Products.findAll({
-      where: { title: data.title, price: data.price, userId: req.params.userId },
+    const productData = await Products.create({
+      ...data,
+      userId,
+      categoryId: data.categoryId,
+      images: paths,
     });
-    if (query.length > 0) {
-      return res
-        .status(409)
-        .json({ status: false, message: "Product with same name already exists!!" });
-    }
-
-    const productData = await Products.create({ ...data, userId });
     const response = {
       status: true,
       message: "Product added successfully!!",

@@ -2,7 +2,12 @@ const express = require("express");
 
 const route = express.Router();
 
-const { validateToken, checkRole } = require("./middleware/AuthMiddleware");
+const {
+  validateToken,
+  checkRole,
+  productValidation,
+  uploadFile,
+} = require("./middleware/AuthMiddleware");
 const {
   registerUser,
   signIn,
@@ -29,7 +34,6 @@ const {
 
 const { addAddress, getAddress } = require("./controller/UserAddressController");
 const { addToCart, getCart, deleteFromCart, emptyCart } = require("./controller/CartController");
-const { uploadImg } = require("./helper/Util");
 
 // Authentication
 route.post("/register", registerUser);
@@ -47,7 +51,7 @@ route.delete("/users/:id", validateToken, checkRole, deleteUser);
 
 // Products Routes
 route.get("/products", validateToken, checkRole, getAllProducts);
-route.post("/products", validateToken, checkRole, uploadImg.array("img"), addProducts);
+route.post("/products", validateToken, checkRole, uploadFile, productValidation, addProducts);
 route.delete("/products/:id", validateToken, checkRole, deleteProduct);
 route.put("/products/:id", validateToken, checkRole, updateProduct);
 route.get("/products/:id", getSingleProduct);

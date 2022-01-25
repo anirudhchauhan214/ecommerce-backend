@@ -4,6 +4,10 @@ require("dotenv").config();
 require("./db/Connection");
 
 app.use(express.json());
+
+app.use(express.static(__dirname + "/public"));
+app.use("/uploads/images", express.static("uploads/images"));
+
 app.use(require("./Routes"));
 
 try {

@@ -29,7 +29,7 @@ db.Category.hasMany(db.Products);
 db.Address.belongsTo(db.Users, { foreignKey: "userId" });
 db.Products.belongsTo(db.Users, { foreignKey: "userId" });
 db.Cart.belongsTo(db.Users, { foreignKey: "userId" });
-db.Products.belongsTo(db.Category, { foreignKey: "uId" });
+db.Products.belongsTo(db.Category);
 db.Cart.belongsTo(db.Products);
 
 try {

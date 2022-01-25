@@ -1,4 +1,8 @@
 const jwt = require("jsonwebtoken");
+const db = require("../db/Connection");
+const { deleteImg, uploadImg } = require("../helper/Util");
+const Products = db.Products;
+const multer = require("multer");
 
 module.exports = {
   validateToken: (req, res, next) => {
@@ -29,6 +33,7 @@ module.exports = {
       res.status(401).send(result);
     }
   },
+
   checkRole: (req, res, next) => {
     const authorizationHeaader = req.headers.authorization;
     let result;
@@ -57,5 +62,46 @@ module.exports = {
       };
       res.status(401).send(result);
     }
+  },
+
+  productValidation: async (req, res, next) => {
+    const data = req.body;
+    if (
+      data.title == "" ||
+      data.title == null ||
+      data.description == null ||
+      data.price == null ||
+      data.description == "" ||
+      data.price == "" ||
+      data.categoryId == null ||
+      data.categoryId == ""
+    ) {
+      deleteImg(req.files);
+      return res.status(404).send({ status: false, message: "Please fill the form correctly!!" });
+    }
+    const query = await Products.findOne({
+      where: { title: data.title, price: data.price, userId: req.params.userId },
+    });
+
+    if (query) {
+      deleteImg(req.files);
+      return res
+        .status(409)
+        .json({ status: false, message: "Product with same name already exists!!" });
+    }
+    next();
+  },
+
+  uploadFile: (req, res, next) => {
+    const upload = uploadImg.array("img");
+
+    upload(req, res, function (err) {
+      if (err instanceof multer.MulterError) {
+        return res.status(400).json({ status: false, message: err.message });
+      } else if (err) {
+        return res.status(400).json({ status: false, message: err.message });
+      }
+      next();
+    });
   },
 };

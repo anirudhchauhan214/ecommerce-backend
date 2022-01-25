@@ -55,7 +55,7 @@ const emptyCart = async (req, res) => {
   }
 
   try {
-    const empty = await CartItems.destroy({ where: { cartId } });
+    const empty = await CartItems.destroy({ where: { userId } });
     return res.status(200).json({ status: true, message: "Cart empty!!" });
   } catch (err) {
     return res.status(500).json({ status: err.message });
