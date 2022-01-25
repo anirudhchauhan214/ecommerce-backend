@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const connection = require("../db/Connection");
 const User = connection.Users;
-const Cart = connection.Cart;
 
 const registerUser = async (req, res) => {
   let data = req.body;

@@ -39,7 +39,7 @@ const addAddress = async (req, res) => {
       .status(200)
       .json({ status: true, message: "Address added successfully!!", data: data.dataValues });
   } catch (err) {
-    throw err;
+    return res.status(500).json({ status: false, message: err.message });
   }
 };
 
@@ -50,7 +50,7 @@ const getAddress = async (req, res) => {
       .status(200)
       .json({ status: true, message: "Addresses fetched successfully!!", data: address });
   } catch (err) {
-    throw err;
+    return res.status(500).json({ status: false, message: err.message });
   }
 };
 

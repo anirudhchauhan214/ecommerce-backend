@@ -26,9 +26,22 @@ const addProducts = async (req, res) => {
   }
 };
 
+// fetch products with pagination
 const getAllProducts = async (req, res) => {
-  const data = await Products.findAll({ include: [{ model: connection.Users }] });
-  return res.status(200).json({ status: true, message: "Products fetched successfully", data });
+  const limit = req.query.limit ? req.query.limit : 4;
+  const offset = req.query.skip ? req.query.skip : 2;
+
+  try {
+    const data = await Products.findAndCountAll({
+      include: [{ model: connection.Users }],
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
+
+    return res.status(200).json({ status: true, message: "Products fetched successfully", data });
+  } catch (err) {
+    return res.status(500).send({ status: false, message: err.message });
+  }
 };
 
 const getSingleProduct = async (req, res) => {

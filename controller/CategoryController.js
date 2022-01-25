@@ -9,7 +9,7 @@ const getCategory = async (req, res) => {
       .status(200)
       .json({ status: true, message: "Categories Fetched Successfully.", data });
   } catch (err) {
-    throw err;
+    return res.status(500).json({ status: false, message: err.message });
   }
 };
 
@@ -23,7 +23,7 @@ const getSingleCategory = async (req, res) => {
     }
     return res.status(200).json({ status: true, message: "Category fetched successfully!!", data });
   } catch (err) {
-    throw err;
+    return res.status(500).json({ status: false, message: err.message });
   }
 };
 

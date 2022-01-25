@@ -6,6 +6,12 @@ const addToCart = async (req, res) => {
   const productId = req.params.productId;
   const userId = req.params.userId;
   const data = req.body;
+
+  const query = await Products.findOne({ where: { id: productId } });
+  if (!query) {
+    return res.status(404).json({ status: false, message: "Product not found!!" });
+  }
+
   try {
     const cartData = await Cart.create({
       productId,
@@ -14,7 +20,7 @@ const addToCart = async (req, res) => {
     });
     return res.status(200).json({ status: true, message: "Added to cart" });
   } catch (err) {
-    throw err;
+    return res.status(500).json({ status: false, message: err.message });
   }
 };
 
