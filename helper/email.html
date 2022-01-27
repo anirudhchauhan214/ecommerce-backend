@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Email</title>
+  </head>
+  <body>
+    <p>
+      Hello {{name}},
+      <br />
+      We heard that you lost your Eminence User Account's password. Sorry about that!
+      <br />
+      <br />
+      You can use the following button to reset your password:
+      <br />
+      <a href="http://localhost:8080/{{userId}}" target="_blank">
+        <button
+          style="
+            background-color: #1565c0;
+            color: white;
+            border-radius: 8px;
+            border: none;
+            padding: 12px 20px;
+            margin: 8px;
+          "
+        >
+          Click here to reset your password!!
+        </button></a
+      >
+
+      <br />
+      <br />
+      Thanks,
+      <br />
+      The Eminence Team.
+    </p>
+  </body>
+</html>

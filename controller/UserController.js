@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const connection = require("../db/Connection");
+const { sendEmail } = require("../helper/Util");
 const User = connection.Users;
 
 const registerUser = async (req, res) => {
@@ -84,12 +85,12 @@ const getUser = async (req, res) => {
 };
 
 const updateUsers = async (req, res) => {
-  const id = req.params.id;
   const data = req.body;
+  const userId = req.params.userId;
   const existingUser = await User.findOne({ where: { email: data.email, name: data.name } });
 
   try {
-    const user = await User.findOne({ where: { userId: id } });
+    const user = await User.findOne({ where: { userId } });
     if (!user) {
       return res.status(404).json({ status: false, message: "User not found" });
     } else if (user) {
@@ -156,4 +157,57 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, signIn, getUser, updateUsers, getSingleUser, deleteUser };
+const forgetPass = async (req, res) => {
+  const email = req.body.email;
+  const userId = req.params.userId;
+  // const token = req.headers.authorization.split(" ")[1];
+
+  try {
+    const exists = await User.findOne({ where: { email } });
+    if (!exists) {
+      return res.status(404).json({ status: false, message: "User not found!" });
+    } else {
+      sendEmail(email, exists.dataValues.name, userId);
+      return res.status(200).json({
+        status: true,
+        message: "A reset password link has been sent to your registered email.",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({ status: false, message: err.message });
+  }
+};
+
+const updatePassword = async (req, res) => {
+  const userId = req.params.userId;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+
+  if (password !== confirmPassword || password == null || password == "") {
+    return res.status(403).json({ status: false, message: "Please provide a valid password!" });
+  }
+
+  try {
+    const query = await User.findOne({ where: { userId } });
+    if (query) {
+      const hashPass = await bcrypt.hash(password, 10);
+      const updatedPass = await User.update({ password: hashPass }, { where: { userId } });
+      return res.status(200).json({ status: true, message: "Password updated successfully" });
+    } else {
+      return res.status(404).json({ status: false, message: "User not registered!!" });
+    }
+  } catch (err) {
+    return res.status(500).json({ status: false, message: err.message });
+  }
+};
+
+module.exports = {
+  registerUser,
+  signIn,
+  getUser,
+  updateUsers,
+  getSingleUser,
+  deleteUser,
+  forgetPass,
+  updatePassword,
+};

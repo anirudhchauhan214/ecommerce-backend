@@ -15,6 +15,8 @@ const {
   updateUsers,
   getSingleUser,
   deleteUser,
+  forgetPass,
+  updatePassword,
 } = require("./controller/UserController");
 
 const {
@@ -45,9 +47,11 @@ route.get("/users/address", getAddress);
 
 // Users Routes
 route.get("/users", validateToken, checkRole, getUser);
-route.put("/users/:id", validateToken, checkRole, updateUsers);
+route.put("/users/", validateToken, checkRole, updateUsers);
 route.get("/users/:id", getSingleUser);
 route.delete("/users/:id", validateToken, checkRole, deleteUser);
+route.post("/users/reset-password", validateToken, forgetPass);
+route.put("/users/update-password", validateToken, updatePassword);
 
 // Products Routes
 route.get("/products", validateToken, checkRole, getAllProducts);
