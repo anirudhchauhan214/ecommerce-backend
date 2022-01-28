@@ -47,7 +47,7 @@ route.get("/users/address", getAddress);
 
 // Users Routes
 route.get("/users", validateToken, checkRole, getUser);
-route.put("/users/", validateToken, checkRole, updateUsers);
+route.put("/users/:id", validateToken, checkRole, updateUsers);
 route.get("/users/:id", getSingleUser);
 route.delete("/users/:id", validateToken, checkRole, deleteUser);
 route.post("/users/reset-password", validateToken, forgetPass);

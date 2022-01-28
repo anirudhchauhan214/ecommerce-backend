@@ -23,7 +23,7 @@ const registerUser = async (req, res) => {
     return res.status(404).send({ status: false, message: "Please fill the form correctly!!" });
   }
 
-  const query = await User.findAll({ where: { email: data.email, name: data.name } });
+  const query = await User.findAll({ where: { email: data.email } });
   const hashPass = await bcrypt.hash(data.password, 10);
 
   try {
@@ -57,7 +57,9 @@ const signIn = async (req, res) => {
         const token = jwt.sign(userExists.dataValues, process.env.JWT_KEY, {
           expiresIn: "1h",
         });
-        return res.status(200).json({ status: true, message: "Sign in success!!", token });
+        return res
+          .status(200)
+          .json({ status: true, message: "Sign in success!!", token, data: userExists.dataValues });
       } else if (!hashPass) {
         return res.status(401).json({ status: false, message: "Password is invalid!!" });
       }
